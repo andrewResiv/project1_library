@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
 import ru.andrew.project1.models.Book;
 import ru.andrew.project1.models.Person;
@@ -29,21 +31,23 @@ public class BookDAO {
     }
 
     public Book show(int id) {
-        return jdbcTemplate.query("SELECT * FROM Book WHERE person_id = ?", new Object[]{id}, new BeanPropertyRowMapper<>(Book.class))
+        return jdbcTemplate.query("SELECT * FROM Book WHERE book_id = ?", new Object[]{id}, new BeanPropertyRowMapper<>(Book.class))
                 .stream().findAny().orElse(null);
     }
 
-    public void save(Book book) {
+    public int save(Book book) {
+        KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update("INSERT INTO Book(name, author, year) VALUES (?, ?, ?)",
-                book.getName(), book.getAuthor(), book.getYear());
+                book.getName(), book.getAuthor(), book.getYear(), keyHolder);
+        return keyHolder.getKey() != null ? keyHolder.getKey().intValue() : null;
     }
 
     public void update(int id, Book updateBook) {
-        jdbcTemplate.update("UPDATE Book SET name=?, author=?, year=? WHERE id=?",
+        jdbcTemplate.update("UPDATE Book SET name=?, author=?, year=? WHERE book_id=?",
                 updateBook.getName(), updateBook.getAuthor(), updateBook.getYear(), id);
     }
 
     public void delete(int id) {
-        jdbcTemplate.update("DELETE FROM Book WHERE id=?", id);
+        jdbcTemplate.update("DELETE FROM Book WHERE book_id=?", id);
     }
 }

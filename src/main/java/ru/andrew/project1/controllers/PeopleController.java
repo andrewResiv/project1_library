@@ -10,6 +10,7 @@ import ru.andrew.project1.models.Person;
 import ru.andrew.project1.util.PersonValidator;
 
 import javax.validation.Valid;
+import java.util.List;
 
 /**
  * @author Neil Alishev
@@ -29,14 +30,19 @@ public class PeopleController {
 
     @GetMapping()
     public String index(Model model) {
-        model.addAttribute("people", personDAO.index());
+        List<Person> people = personDAO.index();
+        model.addAttribute("people", people);
         return "people/index";
     }
 
-    @GetMapping("/{id}")
-    public String show(@PathVariable("id") int id, Model model) {
-        model.addAttribute("person", personDAO.show(id));
-        return "people/show";
+    @GetMapping("/{person_id}")
+    public String show(@PathVariable("person_id") int personId, Model model) {
+        Person person = personDAO.show(personId);
+        if (person == null) {
+            return "redirect:/error";  // Перенаправление на страницу ошибки, если человек не найден
+        }
+        model.addAttribute("person", person);
+        return "/people/show";  // Страница отображения информации о человеке
     }
 
     @GetMapping("/new")
@@ -50,29 +56,30 @@ public class PeopleController {
         personValidator.validate(person, bindingResult);
         if (bindingResult.hasErrors())
             return "people/new";
+//        personDAO.save(person);
         personDAO.save(person);
         return "redirect:/people";
     }
-    @GetMapping("/{id}/edit")
-    public String edit(Model model, @PathVariable("id") int id) {
-        model.addAttribute("person", personDAO.show(id));
+    @GetMapping("/{person_id}/edit")
+    public String edit(Model model, @PathVariable("person_id") int person_id) {
+        model.addAttribute("person", personDAO.show(person_id));
         return "people/edit";
     }
 
-    @PatchMapping("/{id}")
+    @PatchMapping("/{person_id}")
     public String update(@ModelAttribute("person") @Valid Person person,
                          BindingResult bindingResult,
-                         @PathVariable("id") int id) {
+                         @PathVariable("person_id") int person_id) {
         personValidator.validate(person, bindingResult);
         if (bindingResult.hasErrors())
             return "people/edit";
-        personDAO.update(id, person);
+        personDAO.update(person_id, person);
         return "redirect:/people";
     }
 
-    @DeleteMapping("/{id}")
-    public String delete(@PathVariable int id) {
-        personDAO.delete(id);
+    @DeleteMapping("/{person_id}")
+    public String delete(@PathVariable int person_id) {
+        personDAO.delete(person_id);
         return "redirect:/people";
     }
 }
