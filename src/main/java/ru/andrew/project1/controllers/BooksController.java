@@ -7,6 +7,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.andrew.project1.dao.BookDAO;
 import ru.andrew.project1.models.Book;
+import ru.andrew.project1.util.BookValidator;
 import ru.andrew.project1.util.PersonValidator;
 
 import javax.validation.Valid;
@@ -19,12 +20,12 @@ import javax.validation.Valid;
 public class BooksController {
 
     private final BookDAO bookDAO;
-    private final PersonValidator personValidator;
+    private final BookValidator bookValidator;
 
     @Autowired
-    public BooksController(BookDAO personDAO, PersonValidator personValidator) {
+    public BooksController(BookDAO personDAO, BookValidator bookValidator) {
         this.bookDAO = personDAO;
-        this.personValidator = personValidator;
+        this.bookValidator = bookValidator;
     }
 
     @GetMapping()
@@ -47,7 +48,7 @@ public class BooksController {
     @PostMapping()
     public String create(@ModelAttribute("book") @Valid Book book,
                          BindingResult bindingResult) {
-        personValidator.validate(book, bindingResult);
+        bookValidator.validate(book, bindingResult);
         if (bindingResult.hasErrors())
             return "books/new";
         bookDAO.save(book);
@@ -63,7 +64,7 @@ public class BooksController {
     public String update(@ModelAttribute("book") @Valid Book book,
                          BindingResult bindingResult,
                          @PathVariable("id") int id) {
-        personValidator.validate(book, bindingResult);
+        bookValidator.validate(book, bindingResult);
         if (bindingResult.hasErrors())
             return "books/edit";
         bookDAO.update(id, book);

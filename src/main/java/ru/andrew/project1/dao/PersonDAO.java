@@ -39,7 +39,7 @@ public class PersonDAO {
     public Optional<Person> show(String name){
         return jdbcTemplate.query("SELECT * FROM Person WHERE full_name=?",
                 new Object[] {name}, new BeanPropertyRowMapper<>(Person.class)).stream().findAny();
-       }
+    }
 
     public Integer save(Person person) {
         String sql = "INSERT INTO Person (full_name, birthday) VALUES (?, ?) RETURNING person_id";
