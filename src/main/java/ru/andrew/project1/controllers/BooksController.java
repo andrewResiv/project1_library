@@ -23,8 +23,8 @@ public class BooksController {
     private final BookValidator bookValidator;
 
     @Autowired
-    public BooksController(BookDAO personDAO, BookValidator bookValidator) {
-        this.bookDAO = personDAO;
+    public BooksController(BookDAO bookDAO, BookValidator bookValidator) {
+        this.bookDAO = bookDAO;
         this.bookValidator = bookValidator;
     }
 
@@ -36,7 +36,7 @@ public class BooksController {
 
     @GetMapping("/{id}")
     public String show(@PathVariable("id") int id, Model model) {
-        model.addAttribute("books", bookDAO.show(id));
+        model.addAttribute("book", bookDAO.show(id));
         return "books/show";
     }
 

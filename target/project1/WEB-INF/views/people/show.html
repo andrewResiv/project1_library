@@ -8,10 +8,12 @@
 <p th:text="${person.getFull_name() + ', ' + person.getBirthday()}">VALUE</p>
 <p th:text="${person.person_id}">VALUE</p>
 
+<th:if> </th:if>
+
 <a th:href="@{/people/{person_id}/edit(person_id=${person.person_id})}">Edit</a>
 
 <form th:method="DELETE" th:action="@{/people/{person_id}(person_id=${person.person_id})}">
-    <input type="submit" value="Delete"/>
+    <input type="submit" value="Удалить"/>
 </form>
 </body>
 </html>

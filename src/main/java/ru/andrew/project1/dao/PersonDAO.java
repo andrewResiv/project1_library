@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
+import ru.andrew.project1.models.Book;
 import ru.andrew.project1.models.Person;
 
 import java.util.List;
@@ -27,6 +28,7 @@ public class PersonDAO {
 
     public Person show(int person_id) {
         String sql = "SELECT person_id, full_name, birthday FROM Person WHERE person_id = ?";
+
         return jdbcTemplate.queryForObject(sql, new Object[]{person_id}, (rs, rowNum) -> {
             Person person = new Person();
             person.setPerson_id(rs.getInt("person_id"));
@@ -41,6 +43,10 @@ public class PersonDAO {
                 new Object[] {name}, new BeanPropertyRowMapper<>(Person.class)).stream().findAny();
     }
 
+    public List<Book> showBooksOfPerson(int person_id) {
+        String sql = "SELECT * FROM Book WHERE person_id = ?";
+        return jdbcTemplate.query(sql, new Object[]{person_id}, new BeanPropertyRowMapper<>(Book.class));
+    }
     public Integer save(Person person) {
         String sql = "INSERT INTO Person (full_name, birthday) VALUES (?, ?) RETURNING person_id";
         Integer generatedId = jdbcTemplate.queryForObject(sql, new Object[]{person.getFull_name(), person.getBirthday()}, Integer.class);

@@ -19,6 +19,7 @@ import org.thymeleaf.spring5.view.ThymeleafViewResolver;
 
 import javax.sql.DataSource;
 import java.util.Objects;
+import java.util.Properties;
 
 /**
  * @author Neil Alishev
@@ -71,6 +72,14 @@ public class SpringConfig implements WebMvcConfigurer {
         dataSource.setUrl(environment.getProperty("url"));
         dataSource.setUsername(environment.getProperty("user_value"));
         dataSource.setPassword(environment.getProperty("password"));
+
+
+        // Явно задаем кодировку для PostgreSQL
+        Properties props = new Properties();
+        props.setProperty("useUnicode", "true");
+        props.setProperty("characterEncoding", "UTF-8");
+        dataSource.setConnectionProperties(props);
+
         return dataSource;
     }
 
