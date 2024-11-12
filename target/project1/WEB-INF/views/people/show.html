@@ -6,11 +6,28 @@
 </head>
 <body>
 <p th:text="${person.getFull_name() + ', ' + person.getBirthday()}">VALUE</p>
-<p th:text="${person.person_id}">VALUE</p>
 
-<th:if> </th:if>
+<th:if></th:if>
 
-<a th:href="@{/people/{person_id}/edit(person_id=${person.person_id})}">Edit</a>
+<!-- Проверка, есть ли у человека книги -->
+
+<ul th:if="${books != null && !books.isEmpty()}">
+    <h3>Книги: </h3>
+    <li th:each="book : ${books}">
+        <span th:text="${book.name}"></span>, <span th:text="${book.author}"></span> (Published: <span th:text="${book.year}"></span>)
+    </li>
+</ul>
+
+<!-- Сообщение, если книг нет -->
+<p th:if="${books == null || books.isEmpty()}">
+Человек пока не взял ни одной книги
+</p>
+
+<hr/>
+
+<form th:action="@{/people/{person_id}/edit(person_id=${person.person_id})}">
+    <input type="submit" value="Редактировать"/>
+</form>
 
 <form th:method="DELETE" th:action="@{/people/{person_id}(person_id=${person.person_id})}">
     <input type="submit" value="Удалить"/>

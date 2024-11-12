@@ -37,6 +37,10 @@ public class BookDAO {
                 new Object[] {name}, new BeanPropertyRowMapper<>(Book.class)).stream().findAny();
     }
 
+    public List<Book> showBooksOfPerson(int person_id) {
+        String sql = "SELECT * FROM Book WHERE person_id = ?";
+        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Book.class), person_id);
+    }
 
     public Integer save(Book book) {
         String sql = "INSERT INTO Book (name, author, year) VALUES (?, ?, ?) RETURNING book_id";
@@ -52,4 +56,15 @@ public class BookDAO {
     public void delete(int book_id) {
         jdbcTemplate.update("DELETE FROM Book WHERE book_id=?", book_id);
     }
+
+    // Назначение человека к книге
+    public void assignPersonToBook(int bookId, int personId) {
+        jdbcTemplate.update("UPDATE Book SET person_id = ? WHERE book_id = ?", personId, bookId);
+    }
+
+    // Снятие привязки человека от книги
+    public void unassignPersonFromBook(int bookId) {
+        jdbcTemplate.update("UPDATE Book SET person_id = NULL WHERE book_id = ?", bookId);
+    }
+
 }

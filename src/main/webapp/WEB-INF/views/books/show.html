@@ -6,19 +6,35 @@
 </head>
 <body>
 
-<p th:text="${book.getName() + ', ' + book.getAuthor()}">VALUE</p>
+<p th:text="${book.getName() + ', ' + book.getAuthor() + ', ' + book.getYear()}">VALUE</p>
 
 
-<!--<label for="person">Выберите человека:</label>-->
-<!--<select th:object="${person}" th:field="*{person}" id="person">-->
-<!--    <option th:each="person : ${people}" th:value="${person.getFull_name()}"-->
-<!--            th:text="${person.getFull_name()}"></option>-->
-<!--</select>-->
+<div th:if="${book.person_id != null}">
+    <span th:text="'Книга сейчас у: '+${assignedPerson.full_name}"></span>
+<form th:method="DELETE" th:action="@{/books/{id}/assignPerson(id=${book.getBook_id()})}">
+    <input type="submit" value="Освободить книгу"/>
+</form>
+</div>
+
+<hr/>
+
+<div th:if="${book.person_id == null}">
+    <h3>Assign Person to this Book:</h3>
+    <form th:action="@{/books/{book_id}/assignPerson(book_id=${book.book_id})}" th:method="post">
+    <label for="person">Select a Person:</label>
+    <select name="personId" id="person">
+        <option th:each="person : ${people}"
+                th:value="${person.person_id}"
+                th:text="${person.getFull_name()}"></option>
+    </select>
+    <button type="submit">Assign</button>
+</form>
+</div>
 
 <a th:href="@{/books/{id}/edit(id=${book.getBook_id()})}">Edit</a>
 
 <form th:method="DELETE" th:action="@{/books/{id}(id=${book.getBook_id()})}">
-    <input type="submit" value="Delete"/>
+    <input type="submit" value="Удалить"/>
 </form>
 </body>
 </html>

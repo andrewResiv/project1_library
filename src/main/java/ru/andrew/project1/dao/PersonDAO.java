@@ -43,10 +43,7 @@ public class PersonDAO {
                 new Object[] {name}, new BeanPropertyRowMapper<>(Person.class)).stream().findAny();
     }
 
-    public List<Book> showBooksOfPerson(int person_id) {
-        String sql = "SELECT * FROM Book WHERE person_id = ?";
-        return jdbcTemplate.query(sql, new Object[]{person_id}, new BeanPropertyRowMapper<>(Book.class));
-    }
+
     public Integer save(Person person) {
         String sql = "INSERT INTO Person (full_name, birthday) VALUES (?, ?) RETURNING person_id";
         Integer generatedId = jdbcTemplate.queryForObject(sql, new Object[]{person.getFull_name(), person.getBirthday()}, Integer.class);

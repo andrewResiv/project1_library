@@ -6,11 +6,14 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.andrew.project1.dao.BookDAO;
+import ru.andrew.project1.dao.PersonDAO;
 import ru.andrew.project1.models.Book;
+import ru.andrew.project1.models.Person;
 import ru.andrew.project1.util.BookValidator;
 import ru.andrew.project1.util.PersonValidator;
 
 import javax.validation.Valid;
+import java.util.List;
 
 /**
  * @author Neil Alishev
@@ -19,11 +22,13 @@ import javax.validation.Valid;
 @RequestMapping("/books")
 public class BooksController {
 
+    private final PersonDAO personDAO;
     private final BookDAO bookDAO;
     private final BookValidator bookValidator;
 
     @Autowired
-    public BooksController(BookDAO bookDAO, BookValidator bookValidator) {
+    public BooksController(PersonDAO personDAO, BookDAO bookDAO, BookValidator bookValidator) {
+        this.personDAO = personDAO;
         this.bookDAO = bookDAO;
         this.bookValidator = bookValidator;
     }
@@ -36,8 +41,20 @@ public class BooksController {
 
     @GetMapping("/{id}")
     public String show(@PathVariable("id") int id, Model model) {
-        model.addAttribute("book", bookDAO.show(id));
+        Book book =bookDAO.show(id);
+        model.addAttribute("book", book);
+
+        // Если книга привязана к человеку
+        if (book.getPerson_id() != null) {
+            Person assignedPerson = personDAO.show(book.getPerson_id());
+            model.addAttribute("assignedPerson", assignedPerson);
+        }
+
+        List<Person> people = personDAO.index();
+        model.addAttribute("people", people);
         return "books/show";
+
+
     }
 
     @GetMapping("/new")
@@ -56,7 +73,7 @@ public class BooksController {
     }
     @GetMapping("/{id}/edit")
     public String edit(Model model, @PathVariable("id") int id) {
-        model.addAttribute("person", bookDAO.show(id));
+        model.addAttribute("book", bookDAO.show(id));
         return "books/edit";
     }
 
@@ -64,7 +81,6 @@ public class BooksController {
     public String update(@ModelAttribute("book") @Valid Book book,
                          BindingResult bindingResult,
                          @PathVariable("id") int id) {
-        bookValidator.validate(book, bindingResult);
         if (bindingResult.hasErrors())
             return "books/edit";
         bookDAO.update(id, book);
@@ -74,6 +90,18 @@ public class BooksController {
     @DeleteMapping("/{id}")
     public String delete(@PathVariable int id) {
         bookDAO.delete(id);
+        return "redirect:/books";
+    }
+    // Обработка назначения человека к книге
+    @PostMapping("/{id}/assignPerson")
+    public String assignPersonToBook(@PathVariable("id") int bookId,
+                                     @RequestParam("personId") int personId) {
+        bookDAO.assignPersonToBook(bookId, personId);
+        return "redirect:/books/" + bookId;
+    }
+    @DeleteMapping("/{id}/assignPerson")
+    public String deletePersonFromBook(@PathVariable int id) {
+        bookDAO.unassignPersonFromBook(id);
         return "redirect:/books";
     }
 }

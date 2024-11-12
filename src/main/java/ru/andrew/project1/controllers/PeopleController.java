@@ -5,7 +5,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import ru.andrew.project1.dao.BookDAO;
 import ru.andrew.project1.dao.PersonDAO;
+import ru.andrew.project1.models.Book;
 import ru.andrew.project1.models.Person;
 import ru.andrew.project1.util.PersonValidator;
 
@@ -20,11 +22,13 @@ import java.util.List;
 public class PeopleController {
 
     private final PersonDAO personDAO;
+    private final BookDAO bookDAO;
     private final PersonValidator personValidator;
 
     @Autowired
-    public PeopleController(PersonDAO personDAO, PersonValidator personValidator) {
+    public PeopleController(PersonDAO personDAO, BookDAO bookDAO, PersonValidator personValidator) {
         this.personDAO = personDAO;
+        this.bookDAO = bookDAO;
         this.personValidator = personValidator;
     }
 
@@ -38,10 +42,11 @@ public class PeopleController {
     @GetMapping("/{person_id}")
     public String show(@PathVariable("person_id") int personId, Model model) {
         Person person = personDAO.show(personId);
+        List<Book> books = bookDAO.showBooksOfPerson(personId);
+        model.addAttribute("books", books);
         if (person == null) {
             return "redirect:/error";  // Перенаправление на страницу ошибки, если человек не найден
         }
-
         model.addAttribute("person", person);
         return "/people/show";  // Страница отображения информации о человеке
     }
@@ -72,7 +77,6 @@ public class PeopleController {
     public String update(@ModelAttribute("person") @Valid Person person,
                          BindingResult bindingResult,
                          @PathVariable("person_id") int person_id) {
-        personValidator.validate(person, bindingResult);
         if (bindingResult.hasErrors())
             return "people/edit";
         personDAO.update(person_id, person);
