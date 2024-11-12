@@ -2,35 +2,91 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Show</title>
+    <title>Show Person</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            padding: 20px;
+        }
+        .person-details {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .books {
+            list-style: none;
+            padding: 0;
+        }
+        .books li {
+            background-color: #f9f9f9;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        .books span {
+            font-weight: bold;
+        }
+        .edit-button, .delete-button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 4px;
+            text-decoration: none;
+            margin-top: 20px;
+        }
+        .edit-button:hover, .delete-button:hover {
+            background-color: #45a049;
+        }
+        .error-message {
+            color: red;
+            font-size: 14px;
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
-<p th:text="${person.getFull_name() + ', ' + person.getBirthday()}">VALUE</p>
 
-<th:if></th:if>
+<div class="person-details">
+    <!-- Данные о человеке -->
+    <h1 th:text="${person.getFull_name() + ', ' + person.getBirthday()}">Person's Full Name, Birthday</h1>
 
-<!-- Проверка, есть ли у человека книги -->
+    <!-- Проверка на наличие книг -->
+    <div th:if="${books != null && !books.isEmpty()}">
+        <h3>Книги:</h3>
+        <ul class="books" th:each="book : ${books}">
+            <li>
+                <span th:text="${book.name}"></span>,
+                <span th:text="${book.author}"></span>
+                (Published: <span th:text="${book.year}"></span>)
+            </li>
+        </ul>
+    </div>
 
-<ul th:if="${books != null && !books.isEmpty()}">
-    <h3>Книги: </h3>
-    <li th:each="book : ${books}">
-        <span th:text="${book.name}"></span>, <span th:text="${book.author}"></span> (Published: <span th:text="${book.year}"></span>)
-    </li>
-</ul>
+    <!-- Сообщение, если книг нет -->
+    <div th:if="${books == null || books.isEmpty()}">
+        <p class="error-message">Человек пока не взял ни одной книги.</p>
+    </div>
 
-<!-- Сообщение, если книг нет -->
-<p th:if="${books == null || books.isEmpty()}">
-Человек пока не взял ни одной книги
-</p>
+    <hr/>
 
-<hr/>
+    <!-- Форма для редактирования -->
+    <form th:action="@{/people/{person_id}/edit(person_id=${person.person_id})}">
+        <input class="edit-button" type="submit" value="Редактировать"/>
+    </form>
 
-<form th:action="@{/people/{person_id}/edit(person_id=${person.person_id})}">
-    <input type="submit" value="Редактировать"/>
-</form>
+    <!-- Форма для удаления -->
+    <form th:method="DELETE" th:action="@{/people/{person_id}(person_id=${person.person_id})}">
+        <input class="delete-button" type="submit" value="Удалить"/>
+    </form>
+</div>
 
-<form th:method="DELETE" th:action="@{/people/{person_id}(person_id=${person.person_id})}">
-    <input type="submit" value="Удалить"/>
-</form>
 </body>
 </html>

@@ -3,18 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <title>Index</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            padding: 20px;
+        }
+        .person-list {
+            list-style: none;
+            padding: 0;
+        }
+        .person-list li {
+            margin: 10px 0;
+            padding: 10px;
+            background-color: white;
+            border-radius: 4px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        a {
+            color: #4CAF50;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .add-button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 4px;
+            text-decoration: none;
+        }
+        .add-button:hover {
+            background-color: #45a049;
+        }
+    </style>
 </head>
 <body>
 
-<div th:each="person : ${people}">
-    <a th:href="@{/people/{person_id}(person_id=${person.person_id})}"
-       th:text="${person.getFull_name() + ', ' + person.getBirthday()}">user</a>
-</div>
+<h1>Список людей</h1>
+<ul class="person-list" th:each="person : ${people}">
+    <li>
+        <a th:href="@{/people/{person_id}(person_id=${person.person_id})}"
+           th:text="${person.getFull_name() + ', ' + person.getBirthday()}"></a>
+    </li>
+</ul>
 
-<br/>
 <hr/>
-
-<a href="/people/new">Добавить человека</a>
+<a href="/people/new" class="add-button">Добавить человека</a>
 
 </body>
 </html>
