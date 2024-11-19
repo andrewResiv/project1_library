@@ -5,19 +5,18 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
-import ru.andrew.project1.dao.BookDAO;
-import ru.andrew.project1.dao.PersonDAO;
 import ru.andrew.project1.models.Book;
 import ru.andrew.project1.models.Person;
+import ru.andrew.project1.service.BooksService;
 
 @Component
 public class BookValidator implements Validator {
 
-    private final BookDAO bookDAO;
+    private final BooksService booksService;
 
     @Autowired
-    public BookValidator(BookDAO bookDAO) {
-        this.bookDAO = bookDAO;
+    public BookValidator(BooksService booksService) {
+        this.booksService = booksService;
     }
 
     @Override
@@ -29,8 +28,8 @@ public class BookValidator implements Validator {
     public void validate(Object o, Errors errors) {
         Book book = (Book) o;
 
-        //Посмотреть есть ли такой человек в бд
-        if (bookDAO.show(book.getName()).isPresent()){
+        //Посмотреть есть ли такая книга в бд
+        if (booksService.findBookByName(book.getName())!=null) {
             errors.rejectValue("name", "", "This Book is already in use");
         }
     }

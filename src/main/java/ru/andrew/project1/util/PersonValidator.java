@@ -5,17 +5,16 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
-import ru.andrew.project1.dao.PersonDAO;
 import ru.andrew.project1.models.Person;
+import ru.andrew.project1.service.PeopleService;
 
 @Component
 public class PersonValidator implements Validator {
 
-    private final PersonDAO personDAO;
-
+    private final PeopleService peopleService;
     @Autowired
-    public PersonValidator(PersonDAO personDAO) {
-        this.personDAO = personDAO;
+    public PersonValidator(PeopleService peopleService) {
+        this.peopleService = peopleService;
     }
 
     @Override
@@ -28,7 +27,7 @@ public class PersonValidator implements Validator {
         Person person = (Person) o;
 
         //Посмотреть есть ли такой человек в бд
-        if (personDAO.show(person.getFull_name()).isPresent()){
+        if (peopleService.findByFullName(person.getFull_name())!=null){
             errors.rejectValue("full_name", "", "This name is already in use");
         }
     }

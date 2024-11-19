@@ -45,7 +45,7 @@
 <div class="book-details">
     <p th:text="${book.getName() + ', ' + book.getAuthor() + ', ' + book.getYear()}">VALUE</p>
 
-    <div th:if="${book.person_id != null}">
+    <div th:if="${book.getOwner() != null}">
         <p th:text="'Книга сейчас у: ' + ${assignedPerson.full_name}"></p>
         <form th:method="DELETE" th:action="@{/books/{id}/assignPerson(id=${book.getBook_id()})}">
             <input class="button" type="submit" value="Освободить книгу"/>
