@@ -1,11 +1,9 @@
 package ru.andrew.project1.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.andrew.project1.models.Book;
-import ru.andrew.project1.models.Person;
 import ru.andrew.project1.repositories.BooksRepository;
 
 import java.util.List;

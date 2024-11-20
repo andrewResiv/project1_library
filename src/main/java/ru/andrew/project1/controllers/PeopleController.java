@@ -23,7 +23,6 @@ import java.util.List;
 public class PeopleController {
 
     private final PersonValidator personValidator;
-
     private final PeopleService peopleService;
     private final BooksService booksService;
 

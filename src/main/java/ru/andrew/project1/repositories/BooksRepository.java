@@ -9,8 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.andrew.project1.models.Book;
 
 import java.util.List;
-import java.util.Optional;
-
 @Repository
 public interface BooksRepository extends JpaRepository<Book, Integer> {
 
