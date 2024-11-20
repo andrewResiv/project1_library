@@ -1,6 +1,10 @@
 package ru.andrew.project1.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -13,6 +17,7 @@ import ru.andrew.project1.service.PeopleService;
 import ru.andrew.project1.util.BookValidator;
 
 import javax.validation.Valid;
+
 import java.util.List;
 
 /**
@@ -34,10 +39,36 @@ public class BooksController {
         this.bookValidator = bookValidator;
     }
 
+
     @GetMapping()
-    public String index(Model model) {
-        model.addAttribute("books", booksService.findAll());
-        return "books/index";
+    public String index(@RequestParam(value = "page", required = false) Integer page,
+                        @RequestParam(value = "books_per_page", required = false) Integer booksPerPage,
+                        @RequestParam(value = "sort_by_year", defaultValue = "false") boolean sortByYear,
+                        Model model) {
+
+        // Если пагинация не нужна (нет параметров для страницы и количества книг на странице)
+        if (page == null || booksPerPage == null) {
+            // Загружаем все книги без пагинации
+            List<Book> books = booksService.findAll(); // Этот метод должен вернуть все книги без пагинации
+            model.addAttribute("sortByYear", sortByYear);  // Добавляем параметр sortByYear в модель
+            model.addAttribute("books", books);
+            return "books/index";
+        }
+
+        // Если пагинация требуется, применяем её
+        // А так же проверим, нужна ли сортировка
+        Pageable pageable = sortByYear
+                ? PageRequest.of(page, booksPerPage, Sort.by("year"))
+                : PageRequest.of(page, booksPerPage);
+
+        Page<Book> booksPage = booksService.findAll(pageable);
+
+        model.addAttribute("books", booksPage.getContent());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", booksPage.getTotalPages());
+        model.addAttribute("totalItems", booksPage.getTotalElements());
+
+        return "books/index"; // Возвращаем шаблон
     }
 
     @GetMapping("/{id}")

@@ -1,6 +1,8 @@
 package ru.andrew.project1.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.andrew.project1.models.Book;
@@ -24,17 +26,19 @@ public class BooksService {
         return booksRepository.findByOwnerId(person_id);
     }
 
+    public Page<Book> findAll(Pageable pageable) {
+        return booksRepository.findAll(pageable);
+    }
     public List<Book> findAll() {
-        return booksRepository.findAll();
+        return booksRepository.findAll();  // Возвращает все книги
     }
 
     public Book findBookById(int book_id) {
         return booksRepository.findById(book_id).orElse(null);
     }
 
-    public Book findBookByName(String book_name) {
-        Optional<Book> book = Optional.ofNullable(booksRepository.findByName(book_name));
-        return book.orElse(null);
+    public Optional<Book> findBookByName(String book_name) {
+        return booksRepository.findBookByName(book_name);
     }
 
     @Transactional
@@ -58,6 +62,6 @@ public class BooksService {
 
     @Transactional
     public void unassignBookFromPerson(int book_id) {
-        unassignBookFromPerson(book_id);
+        booksRepository.unassignBookFromPerson(book_id);
     }
 }

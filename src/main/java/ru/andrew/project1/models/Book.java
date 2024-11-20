@@ -1,13 +1,9 @@
 package ru.andrew.project1.models;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
-import java.util.stream.DoubleStream;
 
 
 @Entity
@@ -17,7 +13,7 @@ public class Book {
     @Id
     @Column(name = "book_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer book_id;
+    private int book_id;
 
 
     @ManyToOne
@@ -45,7 +41,7 @@ public class Book {
         this.year = year;
     }
 
-    public Integer getBook_id() {
+    public int getBook_id() {
         return book_id;
     }
 
@@ -90,7 +86,7 @@ public class Book {
     public String toString() {
         return "Book{" +
                 "book_id=" + book_id +
-                ", owner=" + owner +
+                ", owner=" + (owner != null ? owner : "No owner") +
                 ", name='" + name + '\'' +
                 ", author='" + author + '\'' +
                 ", year=" + year +

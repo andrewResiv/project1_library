@@ -1,5 +1,5 @@
 Manifest-Version: 1.0
 Created-By: IntelliJ IDEA
 Built-By: andrew
-Build-Jdk: BellSoft Liberica 21.0.5
+Build-Jdk: Amazon Corretto 1.8.0_432
 

@@ -30,7 +30,7 @@ public class PeopleService {
         return person.orElse(null);
     }
 
-    public Person findByFullName(String fullName){
+    public Optional<Person> findByFullName(String fullName){
         return peopleRepository.findByFullName(fullName);
     }
 

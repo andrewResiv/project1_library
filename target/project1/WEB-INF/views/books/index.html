@@ -40,17 +40,54 @@
         .add-book:hover {
             background-color: #45a049;
         }
+        .pagination {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .pagination a {
+            font-size: 18px;
+            text-decoration: none;
+            color: #333;
+            padding: 5px 10px;
+            margin: 0 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .pagination a:hover {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .pagination .disabled {
+            color: #bbb;
+            pointer-events: none;
+        }
     </style>
 </head>
 <body>
 
 <div class="book-list">
+    <!-- Список книг -->
     <div th:each="book : ${books}">
         <a th:href="@{/books/{id}(id=${book.getBook_id()})}"
            th:text="${book.getName() + ', ' + book.getAuthor()}">Book</a>
     </div>
 
+    <!-- Кнопка для добавления новой книги -->
     <a class="add-book" href="/books/new">Добавить книгу</a>
+</div>
+
+<!-- Пагинация -->
+<div class="pagination">
+    <!-- Кнопка "Предыдущая" -->
+    <a th:href="@{'/books?page=' + (${currentPage} - 1) + '&books_per_page=5&sort_by_year=' + ${sortByYear}}"
+       th:if="${currentPage > 0}">Предыдущая</a>
+
+    <!-- Номер текущей страницы и общее количество страниц -->
+    <span th:text="${currentPage + 1} + ' / ' + ${totalPages}"></span>
+
+    <!-- Кнопка "Следующая" -->
+    <a th:href="@{'/books?page=' + (${currentPage} + 1) + '&books_per_page=5&sort_by_year=' + ${sortByYear}}"
+       th:if="${currentPage < totalPages - 1}">Следующая</a>
 </div>
 
 </body>
