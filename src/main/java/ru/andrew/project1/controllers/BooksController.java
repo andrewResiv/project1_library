@@ -8,11 +8,9 @@ import org.springframework.web.bind.annotation.*;
 
 import ru.andrew.project1.models.Book;
 import ru.andrew.project1.models.Person;
-import ru.andrew.project1.repositories.BooksRepository;
 import ru.andrew.project1.service.BooksService;
 import ru.andrew.project1.service.PeopleService;
 import ru.andrew.project1.util.BookValidator;
-import ru.andrew.project1.util.PersonValidator;
 
 import javax.validation.Valid;
 import java.util.List;

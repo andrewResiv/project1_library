@@ -23,6 +23,7 @@ public class Person {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "person_id")
     private Integer person_id;
     @NotEmpty(message = "Name should not be empty")
     @Size(min=2, max=100, message= "Name should be between 2 and 30 characters")

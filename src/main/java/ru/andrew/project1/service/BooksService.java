@@ -1,5 +1,6 @@
 package ru.andrew.project1.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,6 +17,7 @@ public class BooksService {
 
     private final BooksRepository booksRepository;
 
+    @Autowired
     public BooksService(BooksRepository booksRepository) {
         this.booksRepository = booksRepository;
     }
