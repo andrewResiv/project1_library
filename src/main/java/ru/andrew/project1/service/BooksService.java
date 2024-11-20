@@ -23,7 +23,7 @@ public class BooksService {
     }
 
     public List<Book> showBooksOfPerson(int person_id) {
-        return booksRepository.findByOwnerId(person_id);
+        return booksRepository.findByOwner_personId(person_id);
     }
 
     public Page<Book> findAll(Pageable pageable) {
@@ -48,7 +48,7 @@ public class BooksService {
 
     @Transactional
     public void update(int id, Book book) {
-        book.setBook_id(id);
+        book.setBookId(id);
         booksRepository.save(book);
     }
     @Transactional
@@ -56,12 +56,12 @@ public class BooksService {
         booksRepository.deleteById(id);
     }
     @Transactional
-    public void assignBookToPerson(int person_id, int book_id) {
-        booksRepository.assignBookToPerson(person_id, book_id);
+    public void assignBookToPerson(int personId, int bookId) {
+        booksRepository.assignBookToPerson(personId, bookId);
     }
 
     @Transactional
-    public void unassignBookFromPerson(int book_id) {
-        booksRepository.unassignBookFromPerson(book_id);
+    public void unassignBookFromPerson(int bookId) {
+        booksRepository.unassignBookFromPerson(bookId);
     }
 }

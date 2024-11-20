@@ -45,8 +45,8 @@
 <h1>Список людей</h1>
 <ul class="person-list" th:each="person : ${people}">
     <li>
-        <a th:href="@{/people/{person_id}(person_id=${person.person_id})}"
-           th:text="${person.getFull_name() + ', ' + person.getBirthday()}"></a>
+        <a th:href="@{/people/{id}(id=${person.getPersonId()})}"
+           th:text="${person.getFullName() + ', ' + person.getBirthday()}"></a>
     </li>
 </ul>
 

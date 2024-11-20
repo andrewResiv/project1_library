@@ -15,17 +15,17 @@ import java.util.Optional;
 public interface BooksRepository extends JpaRepository<Book, Integer> {
 
     // Метод для получения всех книг по ID владельца
-    List<Book> findByOwnerId(int ownerId);
+    List<Book> findByOwner_personId(int ownerId);
+
     Optional<Book> findBookByName(String name);
 
     @Modifying
     @Transactional
-    @Query("UPDATE Book b SET b.owner.person_id = :person_id WHERE b.book_id = :book_id")
-    void assignBookToPerson(@Param("book_id") int book_id, @Param("person_id") int person_id);
-
+    @Query("UPDATE Book b SET b.owner.personId = :personId WHERE b.bookId = :bookId")
+    void assignBookToPerson(@Param("bookId") int bookId, @Param("personId") int personId);
 
     @Modifying
     @Transactional
-    @Query("UPDATE Book b SET b.owner.person_id = NULL WHERE b.book_id = :book_id")
-    void unassignBookFromPerson(@Param("book_id") int book_id);
+    @Query("UPDATE Book b SET b.owner = NULL WHERE b.bookId = :bookId")
+    void unassignBookFromPerson(@Param("bookId") int bookId);
 }

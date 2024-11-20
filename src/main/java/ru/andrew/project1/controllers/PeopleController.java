@@ -41,8 +41,8 @@ public class PeopleController {
         return "people/index";
     }
 
-    @GetMapping("/{person_id}")
-    public String show(@PathVariable("person_id") int personId, Model model) {
+    @GetMapping("/{personId}")
+    public String show(@PathVariable("personId") int personId, Model model) {
         Person person = peopleService.findById(personId);
         List<Book> books = booksService.showBooksOfPerson(personId);
         model.addAttribute("books", books);
@@ -62,32 +62,32 @@ public class PeopleController {
     public String create(@ModelAttribute("person") @Valid Person person,
                          BindingResult bindingResult) {
         personValidator.validate(person, bindingResult);
-        System.out.println(person.getFull_name());
+        System.out.println(person.getFullName());
         if (bindingResult.hasErrors())
             return "people/new";
         peopleService.save(person);
         return "redirect:/people";
     }
 
-    @GetMapping("/{person_id}/edit")
-    public String edit(Model model, @PathVariable("person_id") int person_id) {
-        model.addAttribute("person", peopleService.findById(person_id));
+    @GetMapping("/{personId}/edit")
+    public String edit(Model model, @PathVariable("personId") int personId) {
+        model.addAttribute("person", peopleService.findById(personId));
         return "people/edit";
     }
 
-    @PatchMapping("/{person_id}")
+    @PatchMapping("/{personId}")
     public String update(@ModelAttribute("person") @Valid Person person,
                          BindingResult bindingResult,
-                         @PathVariable("person_id") int person_id) {
+                         @PathVariable("personId") int personId) {
         if (bindingResult.hasErrors())
             return "people/edit";
-        peopleService.update(person_id, person);
+        peopleService.update(personId, person);
         return "redirect:/people";
     }
 
-    @DeleteMapping("/{person_id}")
-    public String delete(@PathVariable int person_id) {
-        peopleService.delete(person_id);
+    @DeleteMapping("/{personId}")
+    public String delete(@PathVariable int personId) {
+        peopleService.delete(personId);
         return "redirect:/people";
     }
 }

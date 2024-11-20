@@ -46,28 +46,28 @@
     <p th:text="${book.getName() + ', ' + book.getAuthor() + ', ' + book.getYear()}">VALUE</p>
 
     <div th:if="${book.getOwner() != null}">
-        <p th:text="'Книга сейчас у: ' + ${assignedPerson.full_name}"></p>
-        <form th:method="DELETE" th:action="@{/books/{id}/assignPerson(id=${book.getBook_id()})}">
+        <p th:text="'Книга сейчас у: ' + ${assignedPerson.fullName}"></p>
+        <form th:method="DELETE" th:action="@{/books/{id}/assignPerson(id=${book.getBookId()})}">
             <input class="button" type="submit" value="Освободить книгу"/>
         </form>
     </div>
 
-    <div th:if="${book.person_id == null}">
+    <div th:if="${book.getOwner() == null}">
         <h3>Назначить человека для этой книги:</h3>
-        <form th:action="@{/books/{book_id}/assignPerson(book_id=${book.book_id})}" th:method="post">
+        <form th:action="@{/books/{book_id}/assignPerson(book_id=${book.bookId})}" th:method="post">
             <label for="person">Выберите человека:</label>
             <select name="personId" id="person">
-                <option th:each="person : ${people}"
-                        th:value="${person.person_id}"
-                        th:text="${person.getFull_name()}"></option>
+                <option th:each="person : ${people}"/>
+                        th:value="${person.getPersonId()}"
+                        th:text="${person.getFullName()}"></option>
             </select>
             <button type="submit" class="button">Назначить</button>
         </form>
     </div>
 
     <div class="actions">
-        <a class="button" th:href="@{/books/{id}/edit(id=${book.getBook_id()})}">Редактировать</a>
-        <form th:method="DELETE" th:action="@{/books/{id}(id=${book.getBook_id()})}" style="display:inline;">
+        <a class="button" th:href="@{/books/{id}/edit(id=${book.getBookId()})}">Редактировать</a>
+        <form th:method="DELETE" th:action="@{/books/{id}(id=${book.getBookId()})}" style="display:inline;">
             <input class="button" type="submit" value="Удалить"/>
         </form>
     </div>

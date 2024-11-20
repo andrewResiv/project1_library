@@ -78,7 +78,7 @@ public class BooksController {
 
         // Если книга привязана к человеку
         if (book.getOwner() != null) {
-            Person assignedPerson = peopleService.findById(book.getOwner().getPerson_id());
+            Person assignedPerson = peopleService.findById(book.getOwner().getPersonId());
             model.addAttribute("assignedPerson", assignedPerson);
         }
 

@@ -13,7 +13,7 @@ public class Book {
     @Id
     @Column(name = "book_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int book_id;
+    private int bookId;
 
 
     @ManyToOne
@@ -41,12 +41,12 @@ public class Book {
         this.year = year;
     }
 
-    public int getBook_id() {
-        return book_id;
+    public int getBookId() {
+        return bookId;
     }
 
-    public void setBook_id(int book_id) {
-        this.book_id = book_id;
+    public void setBookId(int bookId) {
+        this.bookId = bookId;
     }
 
 
@@ -85,7 +85,7 @@ public class Book {
     @Override
     public String toString() {
         return "Book{" +
-                "book_id=" + book_id +
+                "book_id=" + bookId +
                 ", owner=" + (owner != null ? owner : "No owner") +
                 ", name='" + name + '\'' +
                 ", author='" + author + '\'' +
