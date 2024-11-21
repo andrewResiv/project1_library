@@ -6,11 +6,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.andrew.project1.models.Book;
+import ru.andrew.project1.models.Person;
 import ru.andrew.project1.repositories.BooksRepository;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -62,18 +62,18 @@ public class BooksService {
         booksRepository.deleteById(id);
     }
     @Transactional
-    public void assignBookToPerson(int bookId, int personId) {
-        Book book = booksRepository.findById(bookId).orElse(null);
-        assert book != null;
-        book.setDeliveryTime(new Date());
-        booksRepository.assignBookToPerson(bookId, personId);
+    public void assignBookToPerson(int bookId, Person person) {
+        booksRepository.findById(bookId).ifPresent(book -> {
+            book.setOwner(person);
+            book.setDeliveryTime(new Date());
+        });
     }
 
     @Transactional
     public void unassignBookFromPerson(int bookId) {
-        Book book = booksRepository.findById(bookId).orElse(null);
-        assert book != null;
-        book.setDeliveryTime(null);
-        booksRepository.unassignBookFromPerson(bookId);
+        booksRepository.findById(bookId).ifPresent(book -> {
+            book.setOwner(null);
+            book.setDeliveryTime(null);
+        });
     }
 }

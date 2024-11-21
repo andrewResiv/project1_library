@@ -20,14 +20,4 @@ public interface BooksRepository extends JpaRepository<Book, Integer> {
     Optional<Book> findBookByName(String name);
 
     List<Book> findByNameStartsWith(String name);
-
-    @Modifying
-    @Transactional
-    @Query("UPDATE Book b SET b.owner.personId = :personId WHERE b.bookId = :bookId")
-    void assignBookToPerson(@Param("bookId") int bookId, @Param("personId") int personId);
-
-    @Modifying
-    @Transactional
-    @Query("UPDATE Book b SET b.owner = NULL WHERE b.bookId = :bookId")
-    void unassignBookFromPerson(@Param("bookId") int bookId);
 }

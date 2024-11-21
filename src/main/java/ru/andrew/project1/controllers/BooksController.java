@@ -132,8 +132,8 @@ public class BooksController {
     // Обработка назначения человека к книге
     @PostMapping("/{id}/assignPerson")
     public String assignPersonToBook(@PathVariable("id") int bookId,
-                                     @RequestParam("personId") int personId) {
-        booksService.assignBookToPerson(bookId, personId);
+                                     @ModelAttribute("person") Person selectedPerson) {
+        booksService.assignBookToPerson(bookId, selectedPerson);
         return "redirect:/books/" + bookId;
     }
     @DeleteMapping("/{id}/assignPerson")

@@ -13,10 +13,9 @@ import ru.andrew.project1.service.PeopleService;
 import ru.andrew.project1.util.PersonValidator;
 
 import javax.validation.Valid;
-import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
+
 
 import static ru.andrew.project1.service.PeopleService.isMoreThan10Days;
 
