@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Search</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 20px;
+        }
+        .form-container, .results-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        label {
+            font-weight: bold;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        input[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            background-color: white;
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+
+<div class="form-container">
+    <h1>Поиск книги</h1>
+    <form th:action="@{/books/search}" method="get">
+        <label for="searchWord">Введите поисковой запрос:</label>
+        <input type="text" name="searchWord" id="searchWord" placeholder="Введите название книги..."/>
+        <input type="submit" value="Искать!"/>
+    </form>
+</div>
+
+<div class="results-container" th:if="${foundBooks}">
+    <h1>Результаты поиска</h1>
+    <ul>
+        <li th:each="book : ${foundBooks}">
+            <strong th:text="${book.name}"></strong> - Автор: <em th:text="${book.author}"></em>
+            <p th:if="${book.owner != null}">
+                Книга сейчас у: <span th:text="${book.owner.fullName}"></span>
+            </p>
+            <p th:if="${book.owner == null}">
+                Книга свободна
+            </p>
+        </li>
+    </ul>
+    <p th:if="${foundBooks.isEmpty()}">Книг не найдено.</p>
+</div>
+
+</body>
+</html>

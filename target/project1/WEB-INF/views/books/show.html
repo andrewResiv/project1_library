@@ -57,7 +57,7 @@
         <form th:action="@{/books/{book_id}/assignPerson(book_id=${book.bookId})}" th:method="post">
             <label for="person">Выберите человека:</label>
             <select name="personId" id="person">
-                <option th:each="person : ${people}"/>
+                <option th:each="person : ${people}"
                         th:value="${person.getPersonId()}"
                         th:text="${person.getFullName()}"></option>
             </select>
@@ -71,6 +71,7 @@
             <input class="button" type="submit" value="Удалить"/>
         </form>
     </div>
+    <a th:href="@{/books/}">Вернуться на страницу книг</a>
 </div>
 
 </body>

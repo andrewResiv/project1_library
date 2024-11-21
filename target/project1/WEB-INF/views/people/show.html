@@ -63,9 +63,11 @@
         <h3>Книги:</h3>
         <ul class="books" th:each="book : ${books}">
             <li>
+                <div th:style="'background-color: ' + (${book.overdue} ? 'red' : 'white')">
                 <span th:text="${book.name}"></span>,
                 <span th:text="${book.author}"></span>
                 (Published: <span th:text="${book.year}"></span>)
+                </div>
             </li>
         </ul>
     </div>
@@ -86,6 +88,8 @@
     <form th:method="DELETE" th:action="@{/people/{person_id}(person_id=${person.personId})}">
         <input class="delete-button" type="submit" value="Удалить"/>
     </form>
+    <br>
+    <a th:href="@{/people/}">Вернуться на страницу читателей</a>
 </div>
 
 </body>

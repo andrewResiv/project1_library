@@ -6,8 +6,10 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.andrew.project1.models.Person;
 import ru.andrew.project1.repositories.PeopleRepository;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 @Service
 @Transactional(readOnly = true)
@@ -20,6 +22,17 @@ public class PeopleService {
         this.peopleRepository = peopleRepository;
     }
 
+    // Метод для проверки, что date2 на 10 или более дней позже date1
+    public static boolean isMoreThan10Days(Date date1, Date date2) {
+        // Получаем разницу между датами в миллисекундах
+        long differenceInMillis = date2.getTime() - date1.getTime();
+
+        // Переводим разницу в дни (миллисекунды / количество миллисекунд в одном дне)
+        long differenceInDays = TimeUnit.MILLISECONDS.toDays(differenceInMillis);
+
+        // Проверяем, что разница больше или равна 10 дням
+        return differenceInDays >= 10;
+    }
 
     public List<Person> findAll(){
         return peopleRepository.findAll();

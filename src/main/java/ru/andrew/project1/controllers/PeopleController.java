@@ -13,7 +13,12 @@ import ru.andrew.project1.service.PeopleService;
 import ru.andrew.project1.util.PersonValidator;
 
 import javax.validation.Valid;
+import java.time.temporal.ChronoUnit;
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import static ru.andrew.project1.service.PeopleService.isMoreThan10Days;
 
 /**
  * @author Neil Alishev
@@ -45,6 +50,12 @@ public class PeopleController {
     public String show(@PathVariable("personId") int personId, Model model) {
         Person person = peopleService.findById(personId);
         List<Book> books = booksService.showBooksOfPerson(personId);
+        Date currentDate = new Date();
+        for (Book book : books) {
+            if (isMoreThan10Days(book.getDeliveryTime(), currentDate)) {
+                book.setOverdue(true);
+            }
+        }
         model.addAttribute("books", books);
         if (person == null) {
             return "redirect:/error";  // Перенаправление на страницу ошибки, если человек не найден
@@ -52,6 +63,8 @@ public class PeopleController {
         model.addAttribute("person", person);
         return "/people/show";  // Страница отображения информации о человеке
     }
+
+
 
     @GetMapping("/new")
     public String newPerson(@ModelAttribute("person") Person person) {

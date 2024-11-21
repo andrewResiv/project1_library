@@ -4,6 +4,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
+import java.util.Date;
 
 
 @Entity
@@ -15,25 +16,32 @@ public class Book {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int bookId;
 
+    @NotEmpty(message = "Name should not be empty")
+    @Size(min=2, max=30, message= "Name should be between 2 and 30 characters")
+    @Column(name = "name")
+    private String name;
+
+    @NotEmpty(message = "Author should not be empty")
+    @Size(min=2, max=30, message= "Author should be between 2 and 30 characters")
+    @Column(name = "author")
+    private String author;
+
+    @Column(name = "year")
+    @Min(value=1800, message = "Year should be greater then 1800")
+    private int year;
 
     @ManyToOne
     @JoinColumn(name = "person_id", referencedColumnName = "person_id")
     private Person owner;
 
-    @NotEmpty(message = "Name should not be empty")
-    @Size(min=2, max=30, message= "Name should be between 2 and 30 characters")
-    private String name;
+    @Column(name = "delivery_time")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date deliveryTime;
 
-    @NotEmpty(message = "Author should not be empty")
-    @Size(min=2, max=30, message= "Author should be between 2 and 30 characters")
-    private String author;
+    @Transient
+    private boolean overdue = false;
 
-    @Min(value=1800, message = "Year should be greater then 1800")
-    private int year;
-
-    public Book(){
-
-    }
+    public Book(){}
 
     public Book(String name, String author, int year) {
         this.name = name;
@@ -80,6 +88,22 @@ public class Book {
 
     public void setYear( int year) {
         this.year = year;
+    }
+
+    public Date getDeliveryTime() {
+        return deliveryTime;
+    }
+
+    public void setDeliveryTime(Date deliveryTime) {
+        this.deliveryTime = deliveryTime;
+    }
+
+    public boolean isOverdue() {
+        return overdue;
+    }
+
+    public void setOverdue(boolean overdue) {
+        this.overdue = overdue;
     }
 
     @Override

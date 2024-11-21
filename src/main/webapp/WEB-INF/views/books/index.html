@@ -74,6 +74,7 @@
 
     <!-- Кнопка для добавления новой книги -->
     <a class="add-book" href="/books/new">Добавить книгу</a>
+    <a th:href="@{'/books?page=0' + '&books_per_page=5&sort_by_year=' + ${sortByYear}}" >Перейти к страничному режиму</a>
 </div>
 
 <!-- Пагинация -->

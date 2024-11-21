@@ -18,6 +18,7 @@ import ru.andrew.project1.util.BookValidator;
 
 import javax.validation.Valid;
 
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -46,15 +47,19 @@ public class BooksController {
                         @RequestParam(value = "sort_by_year", defaultValue = "false") boolean sortByYear,
                         Model model) {
 
+
         // Если пагинация не нужна (нет параметров для страницы и количества книг на странице)
         if (page == null || booksPerPage == null) {
             // Загружаем все книги без пагинации
             List<Book> books = booksService.findAll(); // Этот метод должен вернуть все книги без пагинации
             model.addAttribute("sortByYear", sortByYear);  // Добавляем параметр sortByYear в модель
+            if (sortByYear)
+                books.sort(Comparator.comparingInt(Book::getYear));
             model.addAttribute("books", books);
             return "books/index";
         }
 
+        model.addAttribute("sortByYear", sortByYear);  // Добавляем параметр sortByYear в модель
         // Если пагинация требуется, применяем её
         // А так же проверим, нужна ли сортировка
         Pageable pageable = sortByYear
@@ -135,5 +140,17 @@ public class BooksController {
     public String deletePersonFromBook(@PathVariable int id) {
         booksService.unassignBookFromPerson(id);
         return "redirect:/books";
+    }
+
+    @GetMapping("/search")
+    public String search(@RequestParam(value = "searchWord", required = false) String searchWord, Model model) {
+        // Проверяем, что поисковое слово не пустое
+        if (searchWord == null || searchWord.trim().isEmpty()) {
+            model.addAttribute("error", "Введите поисковый запрос.");
+            return "books/search";
+        }
+        List<Book> foundBooks = booksService.findByNameStartsWith(searchWord);
+        model.addAttribute("foundBooks", foundBooks);
+        return "books/search";
     }
 }
